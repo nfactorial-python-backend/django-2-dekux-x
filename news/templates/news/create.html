@@ -1,0 +1,9 @@
+<body>
+    <h2>Add news</h2>
+
+    <form action="{% url 'news:create'%}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="submit">
+    </form>
+</body>
