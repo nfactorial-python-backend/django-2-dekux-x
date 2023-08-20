@@ -29,7 +29,7 @@ def detail(request,news_id: int):
         news = News.objects.get(pk=news_id)
         comments = Comment.objects.filter(news_id=news_id).order_by("-created_at").all()
     except News.DoesNotExist:
-        raise Http404("Not found")        
+        raise Http404("Not found")  
     context = {"news": news, "comments": comments, "form": form}
     return render(request, "news/detail.html", context)
 
