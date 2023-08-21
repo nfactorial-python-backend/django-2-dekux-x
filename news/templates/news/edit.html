@@ -1,11 +1,11 @@
 {%extends "news/base.html" %}
-{% block title%} Create News {%endblock%}
+{% block title%} Edit News {%endblock%}
 
 <body>
 {% block content%}
 <h2>Add news</h2>
 
-<form action="{% url 'news:create'%}" method="post">
+<form action="{% url 'news:edit' news.id %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="submit">

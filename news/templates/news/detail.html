@@ -1,23 +1,27 @@
+{% extends "news/base.html" %}
+
 <body>
-    <h1>
-        {{news.title}}
-    </h1>
-    <h3>
-        {{news.content}}
-    </h3>
-    <p>
-        {{news.created_at}}
-    </p>
+{% block content%}
+<h1>
+    {{news.title}}
+</h1>
+<h3>
+    {{news.content}}
+</h3>
+<p>
+    {{news.created_at}}
+</p>
 
-    <form action="{% url 'news:detail' news.id %}" method="post">
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Leave a comment">
-    </form>
+<form action="{% url 'news:detail' news.id %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Leave a comment">
+</form>
 
-    {% for comment in comments%}
-    <h4>{{comment.content}}</h4>
-    <p> {{ comment.created_at }}</p>
-    <br>
-    {% endfor %}
+{% for comment in comments%}
+<h4>{{comment.content}}</h4>
+<p> {{ comment.created_at }}</p>
+<br>
+{% endfor %}
+{% endblock %}
 </body>

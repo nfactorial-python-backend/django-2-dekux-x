@@ -1,12 +1,15 @@
+{% extends "news/base.html" %}
 <body>
+    {% block content %}
     <ol>
     {%for news in newss%}
     <li>
-        <p>
+        <a href="{%url 'news:detail' news.id%}">
             {{news.title}}
-        </p>
-        <br>
+        </a>
     </li>
     {%endfor%}
     </ol>
+    {% endblock %}
 </body>
+
