@@ -12,15 +12,25 @@
     {{news.created_at}}
 </p>
 
+{% if auth %}
 <form action="{% url 'news:detail' news.id %}" method="post">
     {% csrf_token %}
     {{form.as_p}}
     <input type="submit" value="Leave a comment">
 </form>
+{%else%}
+<p> Only authorized users can leave comments </p>
+{%endif%}
 
 {% for comment in comments%}
 <h4>{{comment.content}}</h4>
 <p> {{ comment.created_at }}</p>
+{% if request.user == comment.author or perms.news.delete_comment %}
+<form action="{% url 'news:delete_comment' comment.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger" >Удалить</button>
+</form>
+{% endif %}
 <br>
 {% endfor %}
 {% endblock %}

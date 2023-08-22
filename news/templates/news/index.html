@@ -7,6 +7,12 @@
         <a href="{%url 'news:detail' news.id%}">
             {{news.title}}
         </a>
+        {% if request.user == news.author or perms.news.delete_news %}
+        <form action="{% url 'news:delete_news' news.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" >Удалить</button>
+        </form>
+        {% endif %}
     </li>
     {%endfor%}
     </ol>
