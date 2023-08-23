@@ -8,12 +8,39 @@ from django.contrib.auth import login
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group
 
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
+from .serializers import NewsSersializer
 from .models import News, Comment
 from .forms import AddPostNews, AddPostComment, SignUpForm
 
+@login_required(login_url="/login/")
+@api_view(["POST", "GET"])
+def api_create(request): 
+    if request.method == "GET":
+        newss = News.objects.all()
+        serials = NewsSersializer(newss,many = True)
+        return Response(serials.data)
+    serial = NewsSersializer(data = request.data)
+    if serial.is_valid():
+        news = News(title = serial.validated_data["title"], content = serial.validated_data["content"], author = request.user)
+        news.save()
+        return Response({"news_id": news.id, "title": news.title, "content": news.content})
+    return Response("Bad Request", status = 400)
 
-# Create your views here.
+@api_view(["GET","DELETE"])
+def api_detail(request, pk: int):
+    news = get_object_or_404(News, pk = pk)
+    if request.method == "DELETE":
+        if news.author == request.user or request.user.has_perm("news.delete_news"):
+            news.delete()
+            return Response({"detail": "success"})
+        return Response({"detail": "you have no permission"})
+    serial = NewsSersializer(news, many = False)
+    return Response(serial.data)        
+
 def index(request):
     newss = News.objects.order_by("-created_at").all()
     context = {
@@ -31,7 +58,6 @@ def detail(request,news_id: int):
                 raise Http404("Not found") 
             news.comment_set.create(content = form.cleaned_data["content"], author = request.user)
             return redirect(f'/news/{news_id}/')
-        
     else:
         form = AddPostComment
     try:

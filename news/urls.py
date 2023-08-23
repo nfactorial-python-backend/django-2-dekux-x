@@ -12,6 +12,9 @@ urlpatterns = [
     path("sign-up/", views.sign_up, name="sign-up"),
     path("<int:news_id>/delete_news/", views.delete_news, name="delete_news"),
     path("<int:comment_id>/delete_comment/", views.delete_comment, name="delete_comment"),
+    path("api/news/", views.api_create, name="api_create"),
+    path("api/news/<int:pk>/", views.api_detail, name="api_detail"),
+
 
 
 ]
